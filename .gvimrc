@@ -12,8 +12,3 @@ set guifont=Ricty:h15
 set nobackup
 set columns=130
 set lines=40
-
-"----------
-" カラースキーム
-"----------
-colorscheme desert
