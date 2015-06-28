@@ -31,7 +31,7 @@ pull:
 
 .PHONY: push
 push:
-	git commit -a -m ""
+	git commit -a -m "Update"
 	git push origin master
 
 .PHONY: update
