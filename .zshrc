@@ -1,11 +1,4 @@
 #!/bin/zsh
-#          _              
-#  _______| |__  _ __ ___ 
-# |_  / __| '_ \| '__/ __|
-#  / /\__ \ | | | | | (__ 
-# /___|___/_| |_|_|  \___|
-#                         
-#
 
 umask 022
 limit coredumpsize 0
@@ -116,12 +109,6 @@ tmux_automatically_attach() {
                     cowsay -f ghostbusters "G,g,g,ghostbusters!!!"
                     echo ""
                 fi
-            else
-                echo "$fg_bold[red] _____ __  __ _   ___  __ $reset_color"
-                echo "$fg_bold[red]|_   _|  \/  | | | \ \/ / $reset_color"
-                echo "$fg_bold[red]  | | | |\/| | | | |\  /  $reset_color"
-                echo "$fg_bold[red]  | | | |  | | |_| |/  \  $reset_color"
-                echo "$fg_bold[red]  |_| |_|  |_|\___//_/\_\ $reset_color"
             fi
             export DISPLAY="$TMUX"
         elif is_screen_running; then
@@ -417,6 +404,9 @@ zsh_set_alias()
 {
     if is_osx; then
         alias ls='/bin/ls -GF'
+        alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+        alias vi=vim
+
     fi
 
     if has 'git'; then
@@ -435,7 +425,18 @@ zsh_set_alias()
     fi
 
     # Common aliases
+    alias c=cat
+    alias l='ls -al'
+    #alias ll='ls -al | lv'
+    alias d='ls --color=auto -lFo'
     alias ..='cd ..'
+    alias ...='cd ../..'
+    #alias --='cd -'
+    alias p='ps -aef'
+    alias nsna='netstat -na'
+    alias nsnr='netstat -nr'
+    alias sudo='sudo '
+
     alias ld='ls -ld'          # Show info about the directory
     alias lla='ls -lAF'        # Show hidden all files
     alias ll='ls -lF'          # Show long file information
@@ -469,8 +470,6 @@ zsh_set_alias()
     else
         alias diff='diff -u'
     fi
-
-    alias vi="vim"
 
     # Use plain vim.
     alias nvim='vim -N -u NONE -i NONE'
