@@ -406,6 +406,7 @@ zsh_set_alias()
         alias ls='/bin/ls -GF'
         alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
         alias vi=vim
+        alias v=vim
 
     fi
 
