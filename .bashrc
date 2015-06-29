@@ -15,14 +15,77 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # Check existing.
+loading() {
+    echo -e "$fg[blue]Starting $SHELL....$reset_color\n"
+    if [[ -d  ~/.loading ]]; then
+        for f in ~/.loading/*.sh
+        do
+            if [[ ! -x "$f" ]]; then
+                source "$f" 2>/dev/null &&
+                    echo "  loading $f"
+            fi
+            unset f
+        done
+        echo ""
+    fi
+}
+
+# tmux_automatically_attach {{{1
+tmux_automatically_attach() {
+    if is_screen_or_tmux_running; then
+        if is_tmux_runnning; then
+            export DISPLAY="$TMUX"
+        elif is_screen_running; then
+            # For GNU screen
+            :
+        fi
+    else
+        if shell_has_started_interactively && ! is_ssh_running; then
+            if ! has 'tmux'; then
+                echo 'Error: tmux command not found' >/dev/stderr
+                return 1
+            fi
+
+            if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
+                # detached session exists
+                tmux list-sessions
+                echo -n "Tmux: attach? (y/N/num) "
+                read
+                if [[ "$REPLY" =~ ^[Yy]$ ]] || [[ "$REPLY" == '' ]]; then
+                    tmux attach-session
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                elif [[ "$REPLY" =~ ^[0-9]+$ ]]; then
+                    tmux attach -t "$REPLY"
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                fi
+            fi
+
+            if is_osx && has 'reattach-to-user-namespace'; then
+                # on OS X force tmux's default command
+                # to spawn a shell in the user's namespace
+                tmux_login_shell="/usr/local/bin/bash"
+                tmux_config=$(cat ~/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l' $tmux_login_shell'"'))
+                tmux -f <(echo "$tmux_config") new-session && echo "$(tmux -V) created new session supported OS X"
+            else
+                tmux new-session && echo "tmux created new session"
+            fi
+        fi
+    fi
+}
+
 function has()
 {
 	type $1 >/dev/null 2>&1; return $?;
 }
 
 # OS judgement. boolean.
-is_mac=$( uname | grep -qi 'darwin' && true || false ; echo "$?")
-is_linux=$( uname | grep -qi 'linux' && true || false ; echo "$?")
+loading
 
 # environment variables
 export OS=$(uname | awk '{print tolower($1)}')
@@ -206,16 +269,6 @@ fi
 echo -e "${BCyan}This is BASH ${BRed}${BASH_VERSION%.*}${BCyan} - DISPLAY on ${BRed}$DISPLAY${NC}\n"
 
 # Loads the file except executable one.
-test -d $BIN || mkdir -p $BIN
-if [ -d $BIN ]; then
-	if ls -A1 $BIN/ | grep -q '.sh'; then
-		for f in $BIN/*.sh ; do
-			[ ! -x "$f" ] && . "$f" && echo " load $f"
-		done
-		echo ""
-		unset f
-	fi
-fi
 
 date
 
@@ -234,488 +287,6 @@ fi
 #-------------------------------------------------------------
 # File & strings related functions:
 #-------------------------------------------------------------
-
-if $is_mac; then
-	function op()
-	{
-		if [ -p /dev/stdin ]; then
-			open $(cat -) "$@"
-		elif [ -z "$1" ]; then
-			open .
-		else
-			open "$@"
-		fi
-	}
-
-	function tex()
-	{
-		if ! $(has 'platex') || ! $(has 'dvipdfmx'); then
-			return 1
-		fi
-		platex "$1" && dvipdfmx "${1/.tex/.dvi}" && {
-		echo -e "\n\033[31mCompile complete!\033[m"
-			} && if $(has 'open'); then
-		open "${1/.tex/.pdf}"; fi
-	}
-
-	function poweroff() {
-		osascript -e "set Volume 0"
-		osascript -e 'tell application "Finder" to shut down'
-	}
-fi
-
-function my_readlink()
-{
-	TARGET_FILE=$1
-	
-	builtin cd `dirname $TARGET_FILE`
-	TARGET_FILE=`basename $TARGET_FILE`
-	
-	# Iterate down a (possible) chain of symlinks
-	while [ -L "$TARGET_FILE" ]
-	do
-		TARGET_FILE=`readlink $TARGET_FILE`
-		cd `dirname $TARGET_FILE`
-		TARGET_FILE=`basename $TARGET_FILE`
-	done
-	
-	# Compute the canonicalized name by finding the physical path 
-	# for the directory we're in and appending the target file.
-	PHYS_DIR=`pwd -P`
-	RESULT=$PHYS_DIR/$TARGET_FILE
-	echo $RESULT
-}
-
-function random_cowsay()
-{
-	# /usr/local/Cellar/cowsay/3.03/share/cows
-	#COWS=$(readlink -f $(which cowsay))/../../share/cows
-	COWS=`my_readlink $(which cowsay)/../../share/cows`
-	NBRE_COWS=$(ls -1 $COWS | wc -l)
-	COWS_RANDOM=$(expr $RANDOM % $NBRE_COWS + 1)
-	COW_NAME=$(ls -1 $COWS | awk -F\. -v COWS_RANDOM_AWK=$COWS_RANDOM 'NR == COWS_RANDOM_AWK {print $1}')
-
-	if [ -f ~/.cowsay_name ]; then
-		COW_NAME=$(sed -n '1p' ~/.cowsay_name)
-	else
-		COW_NAME=$(ls -1 $COWS | awk -F\. -v COWS_RANDOM_AWK=$COWS_RANDOM 'NR == COWS_RANDOM_AWK {print $1}')
-	fi
-
-	cowsay -f $COW_NAME "`Fortune -s`"
-}
-
-function nowon()
-{
-	if which fortune cowsay >/dev/null; then
-		while :
-		do
-			random_cowsay 2>/dev/null && break
-		done
-	fi && unset random_cowsay
-	LANG=C
-	echo -e  "\033[33m$(date +'%Y/%m/%d %T')\033[m"
-	echo -en "\n"; pwd; echo -en "\n"
-}
-
-function richpager()
-# By the file number of lines, switch using cat or less.
-# If the pygmentize exists, use it instead of cat.
-{
-	# Use cat as default pager.
-	Pager='cat'
-	if type pygmentize >/dev/null 2>&1; then
-		# Use pygmentize, if exist.
-		Pager='pygmentize'
-	fi
-	# Less option.
-	Less='less -R +Gg'
-	# Get display lines.
-	DispLines=$[ $( stty 'size' < '/dev/tty' | cut -d' ' -f1 ) - 2 ]
-
-	# Normal case.
-	# Can use pygmentize to syntax highlight, if exist.
-	# ex) user$ ./richpager file
-	if [ $# -eq 1 ]; then
-		if [ -f $1 ]; then
-			Filename="$1"
-			FileLines=$(wc -l <$Filename)
-			if (( FileLines > DispLines )); then
-				export LESSOPEN='| pygmentize %s'
-				${Less} $Filename
-				unset LESSOPEN
-			else
-				${Pager} $Filename
-			fi
-		fi
-		return 0
-	else
-		# Many argument.
-		# Cannot use pygmentize bacause cannot judge filetype from extension.
-		# ex) user$ ./richpager file1 file2
-		while (( $# > 0 )) ; do
-			case "$1" in
-				'-n')
-					nflag='-n'
-					shift && continue
-					;;
-			esac
-
-			# Directory.
-			if [[ -d "$1" ]] ; then
-				ls "$1"
-				exit 0
-
-				# Readable files.
-			elif [[ -r "$1" ]] ; then
-				List[${#List[@]}]=$( < "$1" )
-
-				# Enigma.
-			else
-				List[${#List[@]}]=$1
-			fi
-
-			shift
-		done
-
-		# Get file contents.
-		if (( ${#List[@]} > 0 )) ; then
-			File=$( for i in "${List[@]}" ; do echo "$i"; done )
-
-		# No argument, no pipe.
-		elif [[ -t 0 ]] ; then
-			echo "error: No argument." 1>&2
-			return 1
-
-		# Pipe detected.
-		# Cannot use pygmentize even if it exists.
-		# See also pygmentize -h (help file).
-		else
-			File=$( cat - )
-		fi
-
-		# Count file chars.
-		FileLines=$( echo -n "$File" | grep -c '' )
-
-		# File is empty.
-		if (( FileLines < 0 )); then
-			echo "error: No entry." 1>&2
-			return 1
-		fi
-	fi
-
-	# Judgement cat or less.
-	if (( FileLines > DispLines )); then
-		echo "$File" | cat ${nflag} |${Less}
-	else
-		echo "$File" | cat ${nflag}
-	fi
-
-	return 0
-}
-
-function tac()
-{
-	[ -z "$1" ] && exit 1
-	`which ex` -s "${1}" <<-EOF
-	g/^/mo0
-	%p
-	EOF
-}
-
-function deadlink()
-{
-	local f=
-
-	for f in `command ls -A "${1:-$PWD}"`; do
-		local fpath="${1:-$PWD}/$f"
-		if [ -h "$fpath" ]; then
-			[ -a "$fpath" ] || command rm -i "$fpath"
-		fi
-	done
-
-	unset f fpath
-}
-
-function abs_path()
-{
-	if [ -z "$1" ]; then
-		return 1
-	fi
-
-	if [ `expr x"$1" : x'/'` -ne 0 ]; then
-		local rel="$1"
-	else
-		local rel="$PWD/$1"
-	fi
-
-	local abs="/"
-	local _IFS="$IFS"; IFS='/'
-
-	for comp in $rel; do
-		case "$comp" in
-			'.' | '')
-				continue
-				;;
-			'..'	)
-				abs=`dirname "$abs"`
-				;;
-			*		)
-				[ "$abs" = "/" ] && abs="/$comp" || abs="$abs/$comp"
-				;;
-		esac
-	done
-	echo "$abs"
-	IFS="$_IFS"
-}
-
-function rel_path()
-{
-	if [ -z "$1" ]; then
-		return 1
-	fi
-
-	if [ `expr x"$1" : x'/'` -eq 0 ]; then
-		echo "$1: not an absolute path"
-		return 1
-	fi
-
-	local org=`expr x"$PWD" : x'/\(.*\)'`
-	local abs=`expr x"$1"   : x'/\(.*\)'`
-	local rel="."
-	local org1=""
-	local abs1=""
-
-	while true; do
-		org1=`expr x"$org" : x'\([^/]*\)'`
-		abs1=`expr x"$abs" : x'\([^/]*\)'`
-
-		[ "$org1" != "$abs1" ] && break
-
-		org=`expr x"$org" : x'[^/]*/\(.*\)'`
-		abs=`expr x"$abs" : x'[^/]*/\(.*\)'`
-	done
-
-	if [ -n "$org" ]; then
-		local _IFS="$IFS"; IFS='/'
-		for c in $org; do
-			rel="$rel/.."
-		done
-		IFS="$_IFS"
-	fi
-
-	if [ -n "$abs" ]; then
-		rel="$rel/$abs"
-	fi
-
-	rel=`expr x"$rel" : x'\./\(.*\)'`
-	echo "$rel"
-}
-
-function is_pipe()
-{
-	if [ -p /dev/stdin ]; then
-		#if [ -p /dev/fd/0  ]; then
-		#if [ -p /proc/self/fd/0 ]; then
-		#if [ -t 0 ]; then
-		# echo a | is_pipe
-		return 0
-	elif [ -p /dev/stdout ]; then
-		# is_pipe | cat
-		return 0
-	else
-		# is_pipe (Only!)
-		return 1
-	fi
-}
-
-function nonewline()
-{
-	if [ "$(echo -n)" = "-n" ]; then
-		echo "${@:-> }\c"
-	else
-		echo -n "${@:-> }"
-	fi
-}
-
-function is_num()
-{
-	expr "$1" \* 1 >/dev/null 2>&1
-	if [ $? -ge 2 ]; then
-		return 1
-	else
-		return 0
-	fi
-}
-
-function strcmp()
-{
-	# abc == abc (return  0)
-	# abc =< def (return -1)
-	# def >= abc (return  1)
-	if [ $# -ne 2 ]; then
-		echo "Usage: strcmp string1 string2" 1>&2
-		exit 1
-	fi
-	if [ "$1" = "$2" ]; then
-		#return 0
-		echo "0"
-	else
-		local _TMP=`{ echo "$1"; echo "$2"; } | sort -n | sed -n '1p'`
-
-		if [ "$_TMP" = "$1" ]; then
-			#return -1
-			echo "-1"
-		else
-			#return 1
-			echo "1"
-		fi
-	fi
-}
-
-function strlen()
-{
-	local length=`echo "$1" | wc -c | sed -e 's/ *//'`
-	echo `expr $length - 1`
-}
-
-function sort()
-{
-	if [ "$1" = '--help' ]
-	then
-		command sort --help
-		echo -e '\n\nOptions that are described below is an additional option that was made by b4b4r07.\n'
-		echo -e '  -p, --particular-field    sort an optional field; if not given arguments, 2 as a default\n'
-		return 0
-	elif [ "$1" = '-p' -o "$1" = '--particular-field' ]
-	then
-		shift
-		gawk '
-		{
-			line[NR] = $'${1:-2}' "\t" $0;
-		}
-
-		END {
-		asort(line);
-		for (i = 1; i <= NR; i++) {
-			print substr(line[i], index(line[i], "\t") + 1);
-		}
-	}' 2>/dev/null
-	return 0
-fi
-command sort "$@"
-}
-
-function man()
-{
-    for i ; do
-        xtitle The $(basename $1|tr -d .[:digit:]) manual
-        command man -a "$i"
-    done
-}
-
-# Find a file with a pattern in name:
-function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
-
-function extract()      # Handy Extract Program
-{
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1     ;;
-            *.tar.gz)    tar xvzf $1     ;;
-            *.bz2)       bunzip2 $1      ;;
-            *.rar)       unrar x $1      ;;
-            *.gz)        gunzip $1       ;;
-            *.tar)       tar xvf $1      ;;
-            *.tbz2)      tar xvjf $1     ;;
-            *.tgz)       tar xvzf $1     ;;
-            *.zip)       unzip $1        ;;
-            *.Z)         uncompress $1   ;;
-            *.7z)        7z x $1         ;;
-            *)           echo "'$1' cannot be extracted via >extract<" ;;
-        esac
-    else
-        echo "'$1' is not a valid file!"
-    fi
-}
-
-# Creates an archive (*.tar.gz) from given directory.
-function maketar() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-
-# Create a ZIP archive of a file or folder.
-function makezip() { zip -r "${1%%/}.zip" "$1" ; }
-
-# Make your directories and files access rights sane.
-function sanitize() { chmod -R u=rwX,g=rX,o= "$@" ;}
-
-function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
-function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
-
-function killps()   # kill by process name
-{
-    local pid pname sig="-TERM"   # default signal
-    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        echo "Usage: killps [-SIGNAL] pattern"
-        return;
-    fi
-    if [ $# = 2 ]; then sig=$1 ; fi
-    for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} )
-    do
-        pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
-        if ask "Kill process $pid <$pname> with signal $sig?"
-            then kill $sig $pid
-        fi
-    done
-}
-
-function mydf()         # Pretty-print of 'df' output.
-{                       # Inspired by 'dfc' utility.
-    for fs ; do
-
-        if [ ! -d $fs ]
-        then
-          echo -e $fs" :No such file or directory" ; continue
-        fi
-
-        local info=( $(command df -P $fs | awk 'END{ print $2,$3,$5 }') )
-        local free=( $(command df -Pkh $fs | awk 'END{ print $4 }') )
-        local nbstars=$(( 20 * ${info[1]} / ${info[0]} ))
-        local out="["
-        for ((j=0;j<20;j++)); do
-            if [ ${j} -lt ${nbstars} ]; then
-               out=$out"*"
-            else
-               out=$out"-"
-            fi
-        done
-        out=${info[2]}" "$out"] ("$free" free on "$fs")"
-        echo -e $out
-    done
-}
-
-function repeat()       # Repeat n times command.
-{
-    local i max
-    max=$1; shift;
-    for ((i=1; i <= max ; i++)); do  # --> C-like syntax
-        eval "$@";
-    done
-}
-
-function ask()          # See 'killps' for example of use.
-{
-    echo -n "$@" '[y/n] ' ; read ans
-    case "$ans" in
-        y*|Y*) return 0 ;;
-        *) return 1 ;;
-    esac
-}
-
-function corename()   # Get name of app that created a corefile.
-{
-    for file ; do
-        echo -n $file : ; gdb --core=$file --batch | head -1
-    done
-}
 
 # Priority. {{{1
 
@@ -765,7 +336,7 @@ function _exit()
 }
 trap _exit EXIT
 
-if ! $is_mac && $(has 'dircolors'); then
+if ! is_osx && $(has 'dircolors'); then
 	eval `dircolors -b ~/.dir_colors`
 fi
 
@@ -941,7 +512,7 @@ alias vim="$EDITOR"
 alias vi="$EDITOR"
 alias v="$EDITOR"
 
-if $is_mac; then
+if is_osx; then
   alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias vi=vim
   alias v=vim
@@ -952,7 +523,7 @@ if $(has 'git'); then
 	alias gst='git status'
 fi
 
-if $is_mac; then
+if is_osx; then
 	if $(has 'qlmanage'); then
 		alias ql='qlmanage -p "$@" >& /dev/null'
 	fi
@@ -1002,16 +573,6 @@ alias egrep='egrep --color=auto'
 # Use if colordiff exists
 if $(has 'colordiff'); then
 	alias diff='colordiff -u'
-else
-	if [ -f ~/.bin/colordiff ]; then
-		alias diff='~/.bin/colordiff -u'
-	else
-		alias diff='diff -u'
-	fi
-fi
-
-if [ -f ~/.bin/saferm.sh ]; then
-	alias rm='~/.bin/saferm.sh'
 fi
 
 # Use plain vim.
@@ -1241,13 +802,16 @@ _replace_by_history() {
   READLINE_POINT=${#l}
 }
 peco-select-history() {
-declare l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
-READLINE_LINE="$l"
-READLINE_POINT=${#l}
-          }
+  declare l=$(HISTTIMEFORMAT= history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
+  READLINE_LINE="$l"
+  READLINE_POINT=${#l}
+}
+
 bind -x '"\C-r": _replace_by_history'
 bind    '"\C-xr": reverse-search-history'
-          bind -x '"\C-r": peco-select-history'
+bind -x '"\C-r": peco-select-history'
+
+tmux_automatically_attach
 
 # vim:fdm=marker fdc=3 ft=sh ts=2 sw=2 sts=2:
 #}}}
