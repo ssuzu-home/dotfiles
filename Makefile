@@ -33,7 +33,7 @@ pull:
 push:
 	git add .
 	git commit -a -m "Update"
-	git push origin master
+	gGIT_SSH=git-ssh git push origin master
 
 .PHONY: update
 update:

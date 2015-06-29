@@ -7,7 +7,7 @@ fi
 
 # User specific environment and startup programs
 
-export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH:/opt/android-sdk/platform-tools
+export PATH=~/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH:/opt/android-sdk/platform-tools
 export TERM=xterm
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
