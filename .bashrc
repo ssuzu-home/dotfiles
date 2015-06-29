@@ -21,8 +21,8 @@ function has()
 }
 
 # OS judgement. boolean.
-is_mac=$( uname | grep -qi 'darwin' && true || false )
-is_linux=$( uname | grep -qi 'linux' && true || false )
+is_mac=$( uname | grep -qi 'darwin' && true || false ; echo "$?")
+is_linux=$( uname | grep -qi 'linux' && true || false ; echo "$?")
 
 # environment variables
 export OS=$(uname | awk '{print tolower($1)}')
@@ -879,21 +879,22 @@ else
 fi
 
 PS1=
-if $(has '__git_ps1'); then
-	GIT_PS1_SHOWDIRTYSTATE=true
-	GIT_PS1_SHOWSTASHSTATE=true
-	GIT_PS1_SHOWUNTRACKEDFILES=true
-	GIT_PS1_SHOWUPSTREAM=auto
-	PS_GIT="${Red}"'$(__git_ps1)'"${NC}"
-
-	PS1+="${PS_USER}@${PS_HOST}:${PS_WORK}${PS_GIT}"
-	PS1+='$ '
-	#PS1+=">>> "$(show_exit $?)"\n${PS_GIT} "
-else
-	PS1+="[${PS_USER}${PS_ATODE}@${PS_HOST}${PS_SCREEN}${PS_SSH}:${PS_WORK}]\[\033[01;32m\]"
-	PS1+='$(if git status &>/dev/null;then echo git[branch:$(git branch | cut -d" "  -f2-) change:$(git status -s |wc -l)];fi)\[\033[00m\]'
-	PS1+='$ '
-fi
+##if $(has '__git_ps1'); then
+##	GIT_PS1_SHOWDIRTYSTATE=true
+##	GIT_PS1_SHOWSTASHSTATE=true
+##	GIT_PS1_SHOWUNTRACKEDFILES=true
+##	GIT_PS1_SHOWUPSTREAM=auto
+##	PS_GIT="${Red}"'$(__git_ps1)'"${NC}"
+##
+##	PS1+="${PS_USER}@${PS_HOST}:${PS_WORK}${PS_GIT}"
+##	PS1+='$ '
+##	#PS1+=">>> "$(show_exit $?)"\n${PS_GIT} "
+##else
+##	PS1+="[${PS_USER}${PS_ATODE}@${PS_HOST}${PS_SCREEN}${PS_SSH}:${PS_WORK}]\[\033[01;32m\]"
+##	PS1+='$(if git status &>/dev/null;then echo git[branch:$(git branch | cut -d" "  -f2-) change:$(git status -s |wc -l)];fi)\[\033[00m\]'
+##	PS1+='$ '
+##fi
+PS1=\\h:\\w\\$
 
 #PCT="\`if [[ \$EUID -eq 0 ]]; then T='$LIGHTRED' ; else T='$LIGHTBLUE'; fi; 
 #echo \$T \`"
@@ -936,8 +937,15 @@ unset MAILCHECK        # Don't want my shell to warn me of incoming mail.
 # Aliases. {{{1
 #============================================================
 
-alias vi="$EDITOR"
 alias vim="$EDITOR"
+alias vi="$EDITOR"
+alias v="$EDITOR"
+
+if $is_mac; then
+  alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+  alias vi=vim
+  alias v=vim
+fi
 
 # Git.
 if $(has 'git'); then
@@ -954,6 +962,18 @@ fi
 alias cl="richpager"
 
 # Common aliases
+alias c=cat
+alias l='ls -al'
+#alias ll='ls -al | lv'
+alias d='ls --color=auto -lFo'
+alias ..='cd ..'
+alias ...='cd ../..'
+#alias --='cd -'
+alias p='ps -aef'
+alias nsna='netstat -na'
+alias nsnr='netstat -nr'
+alias sudo='sudo '
+
 alias ..="cd .."
 alias ld="ls -ld"          # Show info about the directory
 alias lla="ls -lAF"        # Show hidden all files
