@@ -202,7 +202,12 @@ call neobundle#end()
 " ファイルタイプ別のプラグイン/インデントを有効にする
 filetype plugin indent on
 
-syntax enable
-set background=dark
-colorscheme solarized
-
+if has("mac")
+  syntax enable
+  set background=dark
+  colorscheme solarized
+else
+  syntax enable
+  set background=light
+  colorscheme solarized
+endif
