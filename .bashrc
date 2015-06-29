@@ -26,7 +26,7 @@ is_linux=$( uname | grep -qi 'linux' && true || false )
 
 # environment variables
 export OS=$(uname | awk '{print tolower($1)}')
-export BIN="$HOME/.bin"
+export BIN="$HOME/bin"
 export PATH="$BIN:$PATH"
 
 # Search executable file in $PATH.
