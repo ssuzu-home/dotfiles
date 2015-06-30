@@ -1,55 +1,3 @@
-"      ___                       ___           ___           ___      
-"     /\__\          ___        /\__\         /\  \         /\  \     
-"    /:/  /         /\  \      /::|  |       /::\  \       /::\  \    
-"   /:/  /          \:\  \    /:|:|  |      /:/\:\  \     /:/\:\  \   
-"  /:/__/  ___      /::\__\  /:/|:|__|__   /::\~\:\  \   /:/  \:\  \  
-"  |:|  | /\__\  __/:/\/__/ /:/ |::::\__\ /:/\:\ \:\__\ /:/__/ \:\__\ 
-"  |:|  |/:/  / /\/:/  /    \/__/~~/:/  / \/_|::\/:/  / \:\  \  \/__/ 
-"  |:|__/:/  /  \::/__/           /:/  /     |:|::/  /   \:\  \       
-"   \::::/__/    \:\__\          /:/  /      |:|\/__/     \:\  \      
-"    ~~~~         \/__/         /:/  /       |:|  |        \:\__\     
-"                               \/__/         \|__|         \/__/     
-
-" README:
-" Copyright (c) 2013-2015 b4b4r07 (aka BABAROT) All Rights Reserved
-"
-" BABAROT
-" GitHub -> https://github.com/b4b4r07
-"
-
-" To write this vimrc, the most important thing is to observe the following
-" decencies.
-"
-" - !! Portability and Multi-platform !!
-" - !! Don't rely on plugins too much !!
-"
-" By integrating many useful functions as much as possible　into this vimrc,
-" it is possible to construct the highly versatile Vim without Vim plugins
-" and Network.
-"
-" # Description
-" I'm a Vim beginner. Therefore, this vimrc is incomplete.
-" I appreciate your understanding in this matter.
-" Well, in this vimrc, two useful features have been incorporated.
-"
-" - s:get_buflists()
-" - s:MRU (the internal vimrc)
-"
-" `s:get_buflists()` is a function that manages the buffer in this Vim.
-" Thus, you can grasp the status of the buffer unintentionally.
-" Next, `s:MRU()` is a function that manage a file that was used recently.
-" In recent years, it's features with any editor by default.
-" By embedding the vimrc, because it is not affected by the external plugins,
-" it is possible to use these features if you have this vimrc.
-"
-" Otherwise, there is some useful functions that were embedded in this vimrc.
-"
-" - s:ls()
-" - s:smart_bwipeout()
-" - s:win_tab_switcher()
-" - ...
-"
-" Thank you.
 "==============================================================================
 
 " Startup: {{{1
@@ -183,31 +131,31 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
         \     'mac': 'make -f make_mac.mak',
         \     'unix': 'make -f make_unix.mak',
         \ }}
-  NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
-  NeoBundleLazy 'Shougo/unite-outline', {
-        \ 'depends' : 'Shougo/unite.vim',
-        \ 'autoload' : {
-        \     'unite_sources' : 'outline' },
-        \ }
-  NeoBundleLazy 'Shougo/unite-help', {
-        \ 'autoload' : {
-        \     'unite_sources' : 'help'
-        \ }}
-  NeoBundle 'Shougo/neomru.vim'
-  NeoBundleLazy 'Shougo/neomru.vim', {
-        \ 'autoload' : {
-        \     'unite_sources' : 'file_mru',
-        \ }}
-  NeoBundleLazy 'Shougo/vimfiler', {
-        \ 'depends' : 'Shougo/unite.vim',
-        \ 'autoload' : {
-        \    'commands' : [{ 'name' : 'VimFiler',
-        \                    'complete' : 'customlist,vimfiler#complete' },
-        \                  'VimFiler',
-        \                  'VimFilerExplorer',
-        \                  'Edit', 'Read', 'Source', 'Write'],
-        \    'mappings' : ['<Plug>(vimfiler_switch)']
-        \ }}
+"  NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
+"  NeoBundleLazy 'Shougo/unite-outline', {
+"        \ 'depends' : 'Shougo/unite.vim',
+"        \ 'autoload' : {
+"        \     'unite_sources' : 'outline' },
+"        \ }
+"  NeoBundleLazy 'Shougo/unite-help', {
+"        \ 'autoload' : {
+"        \     'unite_sources' : 'help'
+"        \ }}
+"  NeoBundle 'Shougo/neomru.vim'
+"  NeoBundleLazy 'Shougo/neomru.vim', {
+"        \ 'autoload' : {
+"        \     'unite_sources' : 'file_mru',
+"        \ }}
+"  NeoBundleLazy 'Shougo/vimfiler', {
+"        \ 'depends' : 'Shougo/unite.vim',
+"        \ 'autoload' : {
+"        \    'commands' : [{ 'name' : 'VimFiler',
+"        \                    'complete' : 'customlist,vimfiler#complete' },
+"        \                  'VimFiler',
+"        \                  'VimFilerExplorer',
+"        \                  'Edit', 'Read', 'Source', 'Write'],
+"        \    'mappings' : ['<Plug>(vimfiler_switch)']
+"        \ }}
   NeoBundleLazy 'Shougo/vimshell', {
         \ 'autoload' : {
         \   'commands' : [{ 'name' : 'VimShell',
@@ -222,179 +170,179 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
         \                    'VimShellPop',
         \                    'VimShellInteractive' ] }
         \ }
-  NeoBundle 'Shougo/neosnippet'
-  NeoBundle 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'glidenote/memolist.vim', {
-        \ 'autoload' : {
-        \     'commands' : ['MemoNew', 'MemoGrep']
-        \ }}
-  NeoBundle 'severin-lemaignan/vim-minimap'
-  NeoBundleLazy 'thinca/vim-scouter', {
-        \ 'autoload' : {
-        \     'commands' : 'Scouter'
-        \ }}
-  NeoBundleLazy 'thinca/vim-ref', {
-        \ 'autoload' : {
-        \     'commands' : 'Ref'
-        \ }}
-  NeoBundle 'thinca/vim-quickrun'
-  NeoBundle 'thinca/vim-unite-history'
-  NeoBundle 'thinca/vim-splash'
-  NeoBundle 'thinca/vim-portal'
-  NeoBundle 'thinca/vim-poslist'
-  NeoBundle 'thinca/vim-tabrecent'
-  NeoBundleLazy 'thinca/vim-qfreplace', {
-        \ 'autoload' : {
-        \     'filetypes' : ['unite', 'quickfix'],
-        \ }}
-  NeoBundleLazy 'thinca/vim-ref', {
-        \ 'autoload' : {
-        \   'commands' : [{ 'name' : 'Ref',
-        \                   'complete' : 'customlist,ref#complete'}],
-        \   'unite_sources' : ['ref'],
-        \ }}
-  NeoBundle 'tyru/nextfile.vim'
-  NeoBundle 'tyru/skk.vim'
-  NeoBundleLazy 'tyru/eskk.vim', {
-        \ 'autoload' : {
-        \     'mappings' : [['i', '<Plug>(eskk:toggle)']],
-        \ }}
-  NeoBundleLazy 'tyru/open-browser.vim', {
-        \ 'autoload' : {
-        \     'mappings' : '<Plug>(open-browser-wwwsearch)',
-        \ }}
-  NeoBundleLazy 'tyru/restart.vim', {
-        \ 'gui' : 1,
-        \ 'autoload' : {
-        \     'commands' : 'Restart'
-        \ }}
-  NeoBundleLazy 'sjl/gundo.vim', {
-        \ 'autoload' : {
-        \     'commands' : 'GundoToggle'
-        \ }}
-  NeoBundle 'ujihisa/neco-look', { 'external_commands' : 'look' }
-  NeoBundle 'ujihisa/unite-colorscheme'
-  NeoBundle 'b4b4r07/mru.vim'
-  "NeoBundle 'b4b4r07/vim-vimp'
-  "NeoBundle 'b4b4r07/vim-autocdls'
-  NeoBundle 'b4b4r07/vim-shellutils'
-  NeoBundle 'b4b4r07/vim-favdir'
-  NeoBundle has('gui_running') ? 'itchyny/lightline.vim' : 'b4b4r07/vim-buftabs'
-  "NeoBundle 'b4b4r07/vim-buftabs', {
-  "      \ 'gui' : 0,
-  "      \ 'disabled' : !has('gui_running'),
-  "      \ }
-  "NeoBundle 'itchyny/lightline.vim', {
-  "      \ 'gui' : 1,
-  "      \ 'disabled' : has('gui_running'),
-  "      \ }
-  NeoBundle 'itchyny/calendar.vim'
-  NeoBundle 'nathanaelkane/vim-indent-guides'
-  NeoBundle 'scrooloose/syntastic'
-  NeoBundleLazy 'scrooloose/nerdtree', {
-        \ 'autoload' : {
-        \     'commands' : 'NERDTreeToggle'
-        \ }}
-  NeoBundle 'tpope/vim-surround'
-  NeoBundle 'tpope/vim-repeat'
-  NeoBundleLazy 'tpope/vim-markdown', {
-        \ 'autoload' : {
-        \     'filetypes' : ['markdown']
-        \ }}
-  NeoBundleLazy 'tpope/vim-fugitive', {
-        \ 'autoload': {
-        \     'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff']
-        \ }}
-  NeoBundle 'osyo-manga/vim-anzu'
-  "NeoBundle 'cohama/vim-insert-linenr'
-  NeoBundle 'cohama/agit.vim', {
-        \ 'lazy': 1,
-        \ 'commands': 'Agit',
-        \ }
-  NeoBundle 'cohama/lexima.vim'
-  NeoBundle 'LeafCage/yankround.vim'
-  NeoBundle 'LeafCage/foldCC'
-  NeoBundle 'junegunn/vim-easy-align'
-  "NeoBundle 'jiangmiao/auto-pairs'
-  NeoBundleLazy 'mattn/gist-vim', {
-        \ 'depends': ['mattn/webapi-vim'],
-        \ 'autoload' : {
-        \     'commands' : 'Gist' }}
-  NeoBundleLazy 'mattn/webapi-vim', {
-        \ 'autoload' : {
-        \     'function_prefix': 'webapi'
-        \ }}
-  NeoBundleLazy 'mattn/benchvimrc-vim', {
-        \ 'autoload' : {
-        \     'commands' : 'BenchVimrc'
-        \ }}
-  NeoBundle 'vim-scripts/Align'
-  NeoBundleLazy 'DirDiff.vim', {
-        \ 'autoload' : {
-        \     'commands' : 'DirDiff'
-        \ }}
-  NeoBundleLazy 'mattn/excitetranslate-vim', {
-        \ 'depends': 'mattn/webapi-vim',
-        \ 'autoload' : { 'commands': ['ExciteTranslate'] }
-        \ }
-  NeoBundleLazy 'fatih/vim-go', {
-        \ "autoload" : { "filetypes" : ["go"] }
-        \}
-  NeoBundleLazy 'jnwhiteh/vim-golang', {
-        \ "autoload" : {"filetypes" : ["go"] }
-        \}
-  NeoBundleLazy 'basyura/TweetVim', {
-        \ 'depends' : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
-        \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }
-        \ }
-  "NeoBundle 'yomi322/unite-tweetvim'
-  NeoBundle 'tsukkee/lingr-vim'
-  NeoBundle 'AndrewRadev/switch.vim'
-  "NeoBundle 'Yggdroot/indentLine'
-  "NeoBundle 'ervandew/supertab'
-  NeoBundleLazy 'vim-scripts/renamer.vim', {
-        \ 'autoload' : {
-        \     'commands' : 'Renamer'
-        \ }}
-  NeoBundleLazy 'amdt/sunset', {
-        \ 'gui' : 1,
-        \ }
-  NeoBundle 'rking/ag.vim', { 'external_commands' : 'ag' }
-
-  NeoBundle 'mopp/googlesuggest-source.vim'
-  NeoBundle 'mattn/googlesuggest-complete-vim'
-  NeoBundle 'hotchpotch/perldoc-vim'
-  NeoBundle 'kana/vim-vspec'
-  NeoBundle 'tell-k/vim-browsereload-mac'
-  NeoBundle 'kchmck/vim-coffee-script'
-  NeoBundle 'elzr/vim-json'
-  "NeoBundle 'majutsushi/tagbar'
-  "NeoBundle 'Shougo/vimfiler'
-  "NeoBundle 'Shougo/unite.vim'
-  "NeoBundle 'Shougo/unite-outline'
-  "NeoBundle 'dgryski/vim-godef'
-  "NeoBundle 'vim-jp/vim-go-extra'
-  "NeoBundle 'google/vim-ft-go'
-  NeoBundle 'cespare/vim-toml'
-  "NeoBundle 'ctrlpvim/ctrlp.vim'
-  NeoBundle 'junegunn/vim-emoji'
-  "NeoBundle 'toyamarinyon/hatenablog-vim'
-  "NeoBundle 'b4b4r07/vim-ezoe'
-
-  " Japanese help
-  NeoBundle 'vim-jp/vimdoc-ja'
-  " Vital
-  NeoBundle 'vim-jp/vital.vim', {
-        \ 'lazy' : 1,
-        \ 'autoload' : {
-        \     'commands' : ['Vitalize'],
-        \ }}
-
-  " Colorscheme plugins
-  NeoBundle 'b4b4r07/solarized.vim', { "base" : $HOME."/.vim/colors" }
-  NeoBundle 'nanotech/jellybeans.vim', { "base" : $HOME."/.vim/colors" }
-  NeoBundle 'tomasr/molokai', { "base" : $HOME."/.vim/colors" }
-  NeoBundle 'w0ng/vim-hybrid', { "base" : $HOME."/.vim/colors" }
+"  NeoBundle 'Shougo/neosnippet'
+"  NeoBundle 'Shougo/neosnippet-snippets'
+"  NeoBundleLazy 'glidenote/memolist.vim', {
+"        \ 'autoload' : {
+"        \     'commands' : ['MemoNew', 'MemoGrep']
+"        \ }}
+"  NeoBundle 'severin-lemaignan/vim-minimap'
+"  NeoBundleLazy 'thinca/vim-scouter', {
+"        \ 'autoload' : {
+"        \     'commands' : 'Scouter'
+"        \ }}
+"  NeoBundleLazy 'thinca/vim-ref', {
+"        \ 'autoload' : {
+"        \     'commands' : 'Ref'
+"        \ }}
+"  NeoBundle 'thinca/vim-quickrun'
+"  NeoBundle 'thinca/vim-unite-history'
+"  NeoBundle 'thinca/vim-splash'
+"  NeoBundle 'thinca/vim-portal'
+"  NeoBundle 'thinca/vim-poslist'
+"  NeoBundle 'thinca/vim-tabrecent'
+"  NeoBundleLazy 'thinca/vim-qfreplace', {
+"        \ 'autoload' : {
+"        \     'filetypes' : ['unite', 'quickfix'],
+"        \ }}
+"  NeoBundleLazy 'thinca/vim-ref', {
+"        \ 'autoload' : {
+"        \   'commands' : [{ 'name' : 'Ref',
+"        \                   'complete' : 'customlist,ref#complete'}],
+"        \   'unite_sources' : ['ref'],
+"        \ }}
+"  NeoBundle 'tyru/nextfile.vim'
+"  NeoBundle 'tyru/skk.vim'
+"  NeoBundleLazy 'tyru/eskk.vim', {
+"        \ 'autoload' : {
+"        \     'mappings' : [['i', '<Plug>(eskk:toggle)']],
+"        \ }}
+"  NeoBundleLazy 'tyru/open-browser.vim', {
+"        \ 'autoload' : {
+"        \     'mappings' : '<Plug>(open-browser-wwwsearch)',
+"        \ }}
+"  NeoBundleLazy 'tyru/restart.vim', {
+"        \ 'gui' : 1,
+"        \ 'autoload' : {
+"        \     'commands' : 'Restart'
+"        \ }}
+"  NeoBundleLazy 'sjl/gundo.vim', {
+"        \ 'autoload' : {
+"        \     'commands' : 'GundoToggle'
+"        \ }}
+"  NeoBundle 'ujihisa/neco-look', { 'external_commands' : 'look' }
+"  NeoBundle 'ujihisa/unite-colorscheme'
+"  NeoBundle 'b4b4r07/mru.vim'
+"  "NeoBundle 'b4b4r07/vim-vimp'
+"  "NeoBundle 'b4b4r07/vim-autocdls'
+"  NeoBundle 'b4b4r07/vim-shellutils'
+"  NeoBundle 'b4b4r07/vim-favdir'
+"  NeoBundle has('gui_running') ? 'itchyny/lightline.vim' : 'b4b4r07/vim-buftabs'
+"  "NeoBundle 'b4b4r07/vim-buftabs', {
+"  "      \ 'gui' : 0,
+"  "      \ 'disabled' : !has('gui_running'),
+"  "      \ }
+"  "NeoBundle 'itchyny/lightline.vim', {
+"  "      \ 'gui' : 1,
+"  "      \ 'disabled' : has('gui_running'),
+"  "      \ }
+"  NeoBundle 'itchyny/calendar.vim'
+"  NeoBundle 'nathanaelkane/vim-indent-guides'
+"  NeoBundle 'scrooloose/syntastic'
+"  NeoBundleLazy 'scrooloose/nerdtree', {
+"        \ 'autoload' : {
+"        \     'commands' : 'NERDTreeToggle'
+"        \ }}
+"  NeoBundle 'tpope/vim-surround'
+"  NeoBundle 'tpope/vim-repeat'
+"  NeoBundleLazy 'tpope/vim-markdown', {
+"        \ 'autoload' : {
+"        \     'filetypes' : ['markdown']
+"        \ }}
+"  NeoBundleLazy 'tpope/vim-fugitive', {
+"        \ 'autoload': {
+"        \     'commands': ['Gcommit', 'Gblame', 'Ggrep', 'Gdiff']
+"        \ }}
+"  NeoBundle 'osyo-manga/vim-anzu'
+"  "NeoBundle 'cohama/vim-insert-linenr'
+"  NeoBundle 'cohama/agit.vim', {
+"        \ 'lazy': 1,
+"        \ 'commands': 'Agit',
+"        \ }
+"  NeoBundle 'cohama/lexima.vim'
+"  NeoBundle 'LeafCage/yankround.vim'
+"  NeoBundle 'LeafCage/foldCC'
+"  NeoBundle 'junegunn/vim-easy-align'
+"  "NeoBundle 'jiangmiao/auto-pairs'
+"  NeoBundleLazy 'mattn/gist-vim', {
+"        \ 'depends': ['mattn/webapi-vim'],
+"        \ 'autoload' : {
+"        \     'commands' : 'Gist' }}
+"  NeoBundleLazy 'mattn/webapi-vim', {
+"        \ 'autoload' : {
+"        \     'function_prefix': 'webapi'
+"        \ }}
+"  NeoBundleLazy 'mattn/benchvimrc-vim', {
+"        \ 'autoload' : {
+"        \     'commands' : 'BenchVimrc'
+"        \ }}
+"  NeoBundle 'vim-scripts/Align'
+"  NeoBundleLazy 'DirDiff.vim', {
+"        \ 'autoload' : {
+"        \     'commands' : 'DirDiff'
+"        \ }}
+"  NeoBundleLazy 'mattn/excitetranslate-vim', {
+"        \ 'depends': 'mattn/webapi-vim',
+"        \ 'autoload' : { 'commands': ['ExciteTranslate'] }
+"        \ }
+"  NeoBundleLazy 'fatih/vim-go', {
+"        \ "autoload" : { "filetypes" : ["go"] }
+"        \}
+"  NeoBundleLazy 'jnwhiteh/vim-golang', {
+"        \ "autoload" : {"filetypes" : ["go"] }
+"        \}
+"  NeoBundleLazy 'basyura/TweetVim', {
+"        \ 'depends' : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
+"        \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }
+"        \ }
+"  "NeoBundle 'yomi322/unite-tweetvim'
+"  NeoBundle 'tsukkee/lingr-vim'
+"  NeoBundle 'AndrewRadev/switch.vim'
+"  "NeoBundle 'Yggdroot/indentLine'
+"  "NeoBundle 'ervandew/supertab'
+"  NeoBundleLazy 'vim-scripts/renamer.vim', {
+"        \ 'autoload' : {
+"        \     'commands' : 'Renamer'
+"        \ }}
+"  NeoBundleLazy 'amdt/sunset', {
+"        \ 'gui' : 1,
+"        \ }
+"  NeoBundle 'rking/ag.vim', { 'external_commands' : 'ag' }
+"
+"  NeoBundle 'mopp/googlesuggest-source.vim'
+"  NeoBundle 'mattn/googlesuggest-complete-vim'
+"  NeoBundle 'hotchpotch/perldoc-vim'
+"  NeoBundle 'kana/vim-vspec'
+"  NeoBundle 'tell-k/vim-browsereload-mac'
+"  NeoBundle 'kchmck/vim-coffee-script'
+"  NeoBundle 'elzr/vim-json'
+"  "NeoBundle 'majutsushi/tagbar'
+"  "NeoBundle 'Shougo/vimfiler'
+"  "NeoBundle 'Shougo/unite.vim'
+"  "NeoBundle 'Shougo/unite-outline'
+"  "NeoBundle 'dgryski/vim-godef'
+"  "NeoBundle 'vim-jp/vim-go-extra'
+"  "NeoBundle 'google/vim-ft-go'
+"  NeoBundle 'cespare/vim-toml'
+"  "NeoBundle 'ctrlpvim/ctrlp.vim'
+"  NeoBundle 'junegunn/vim-emoji'
+"  "NeoBundle 'toyamarinyon/hatenablog-vim'
+"  "NeoBundle 'b4b4r07/vim-ezoe'
+"
+"  " Japanese help
+"  NeoBundle 'vim-jp/vimdoc-ja'
+"  " Vital
+"  NeoBundle 'vim-jp/vital.vim', {
+"        \ 'lazy' : 1,
+"        \ 'autoload' : {
+"        \     'commands' : ['Vitalize'],
+"        \ }}
+"
+"  " Colorscheme plugins
+"  NeoBundle 'b4b4r07/solarized.vim', { "base" : $HOME."/.vim/colors" }
+"  NeoBundle 'nanotech/jellybeans.vim', { "base" : $HOME."/.vim/colors" }
+"  NeoBundle 'tomasr/molokai', { "base" : $HOME."/.vim/colors" }
+"  NeoBundle 'w0ng/vim-hybrid', { "base" : $HOME."/.vim/colors" }
 
   " Disable plugins
   if !has('gui_running')
@@ -506,43 +454,6 @@ function! s:has_plugin(name)
         \   || globpath(&rtp, nosuffix, 1) != ''
         \   || globpath(&rtp, 'autoload/' . suffix, 1) != ''
         \   || globpath(&rtp, 'autoload/' . tolower(suffix), 1) != ''
-endfunction
-
-" func s:b4b4r07() {{{2
-" @params -
-" @return -
-"
-function! s:b4b4r07()
-  hide enew
-  setlocal buftype=nofile nowrap nolist nonumber bufhidden=wipe
-  setlocal modifiable nocursorline nocursorcolumn
-
-  let b4b4r07 = []
-  call add(b4b4r07, 'Copyright (c) 2014                                 b4b4r07''s vimrc.')
-  call add(b4b4r07, '.______    _  _    .______    _  _    .______        ___    ______  ')
-  call add(b4b4r07, '|   _  \  | || |   |   _  \  | || |   |   _  \      / _ \  |____  | ')
-  call add(b4b4r07, '|  |_)  | | || |_  |  |_)  | | || |_  |  |_)  |    | | | |     / /  ')
-  call add(b4b4r07, '|   _  <  |__   _| |   _  <  |__   _| |      /     | | | |    / /   ')
-  call add(b4b4r07, '|  |_)  |    | |   |  |_)  |    | |   |  |\  \----.| |_| |   / /    ')
-  call add(b4b4r07, '|______/     |_|   |______/     |_|   | _| `._____| \___/   /_/     ')
-  call add(b4b4r07, 'If it is being displayed, the vim plugins are not set and installed.')
-  call add(b4b4r07, 'In this environment, run '':NeoBundleInit'' if you setup vim plugin.')
-
-  silent put =repeat([''], winheight(0)/2 - len(b4b4r07)/2)
-  let space = repeat(' ', winwidth(0)/2 - strlen(b4b4r07[0])/2)
-  for line in b4b4r07
-    put =space . line
-  endfor
-  silent put =repeat([''], winheight(0)/2 - len(b4b4r07)/2 + 1)
-  silent file B4B4R07
-  1
-
-  execute 'syntax match Directory display ' . '"'. '^\s\+\U\+$'. '"'
-  setlocal nomodifiable
-  redraw
-  let char = getchar()
-  silent enew
-  call feedkeys(type(char) == type(0) ? nr2char(char) : char)
 endfunction
 
 " func s:escape_filename() {{{2
@@ -2217,36 +2128,36 @@ if s:vimrc_colorize_statusline_insert == s:true
 endif
 
 " Cursor line/column {{{2
-set cursorline
-augroup auto-cursorcolumn-appear
-  autocmd!
-  autocmd CursorMoved,CursorMovedI * call s:auto_cursorcolumn('CursorMoved')
-  autocmd CursorHold,CursorHoldI   * call s:auto_cursorcolumn('CursorHold')
-  autocmd WinEnter * call s:auto_cursorcolumn('WinEnter')
-  autocmd WinLeave * call s:auto_cursorcolumn('WinLeave')
-
-  let s:cursorcolumn_lock = 0
-  function! s:auto_cursorcolumn(event)
-    if a:event ==# 'WinEnter'
-      setlocal cursorcolumn
-      let s:cursorcolumn_lock = 2
-    elseif a:event ==# 'WinLeave'
-      setlocal nocursorcolumn
-    elseif a:event ==# 'CursorMoved'
-      if s:cursorcolumn_lock
-        if 1 < s:cursorcolumn_lock
-          let s:cursorcolumn_lock = 1
-        else
-          setlocal nocursorcolumn
-          let s:cursorcolumn_lock = 0
-        endif
-      endif
-    elseif a:event ==# 'CursorHold'
-      setlocal cursorcolumn
-      let s:cursorcolumn_lock = 1
-    endif
-  endfunction
-augroup END
+"set cursorline
+"augroup auto-cursorcolumn-appear
+"  autocmd!
+"  autocmd CursorMoved,CursorMovedI * call s:auto_cursorcolumn('CursorMoved')
+"  autocmd CursorHold,CursorHoldI   * call s:auto_cursorcolumn('CursorHold')
+"  autocmd WinEnter * call s:auto_cursorcolumn('WinEnter')
+"  autocmd WinLeave * call s:auto_cursorcolumn('WinLeave')
+"
+"  let s:cursorcolumn_lock = 0
+"  function! s:auto_cursorcolumn(event)
+"    if a:event ==# 'WinEnter'
+"      setlocal cursorcolumn
+"      let s:cursorcolumn_lock = 2
+"    elseif a:event ==# 'WinLeave'
+"      setlocal nocursorcolumn
+"    elseif a:event ==# 'CursorMoved'
+"      if s:cursorcolumn_lock
+"        if 1 < s:cursorcolumn_lock
+"          let s:cursorcolumn_lock = 1
+"        else
+"          setlocal nocursorcolumn
+"          let s:cursorcolumn_lock = 0
+"        endif
+"      endif
+"    elseif a:event ==# 'CursorHold'
+"      setlocal cursorcolumn
+"      let s:cursorcolumn_lock = 1
+"    endif
+"  endfunction
+"augroup END
 
 augroup multi-window-toggle-cursor "{{{2
   autocmd!
@@ -2839,10 +2750,10 @@ cnoremap <C-h> <BS>
 nnoremap q: <Nop>
 nnoremap q/ <Nop>
 nnoremap q? <Nop>
-nnoremap <Up> <Nop>
-nnoremap <Down> <Nop>
-nnoremap <Left> <Nop>
-nnoremap <Right> <Nop>
+"nnoremap <Up> <Nop>
+"nnoremap <Down> <Nop>
+"nnoremap <Left> <Nop>
+"nnoremap <Right> <Nop>
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
