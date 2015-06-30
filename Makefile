@@ -27,7 +27,7 @@ list:
 
 .PHONY: pull
 pull:
-	git pull origin master
+	GIT_SSH=git-ssh git pull origin master
 
 .PHONY: push
 push:
