@@ -4,5 +4,6 @@ set -eu
 
 exec ssh -q -o StrictHostKeyChecking=no \
  -o UserKnownHostsFile=/dev/null \
- -o IdentityFile=~/.ssh/github_id_rsa "$@"
+ -o IdentityFile=~/.ssh/github_id_rsa \
+ -p 443 "$@"
 
