@@ -123,6 +123,7 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   " NeoBundle List
+  NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimproc', {
         \ 'build': {
@@ -1913,8 +1914,10 @@ else
     if s:has_plugin('solarized.vim')
       try
         colorscheme solarized-cui
+        set background=light
       catch
         colorscheme solarized
+        set background=light
       endtry
     elseif s:has_plugin('jellybeans.vim')
       colorscheme jellybeans
