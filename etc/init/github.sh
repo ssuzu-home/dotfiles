@@ -10,4 +10,4 @@ set -eu
 # Mac OS X only!!
 is_osx || exit
 
-git remote set-url origin git@github.com:ssuzu-home/dotfiles.git
+git remote set-url origin git@ssh.github.com:ssuzu-home/dotfiles.git
