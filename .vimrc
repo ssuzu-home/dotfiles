@@ -123,7 +123,7 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
   NeoBundleFetch 'Shougo/neobundle.vim'
 
   " NeoBundle List
-  NeoBundle 'altercation/vim-colors-solarized'
+  "NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimproc', {
         \ 'build': {
