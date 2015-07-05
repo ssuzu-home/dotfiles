@@ -12,22 +12,23 @@ fi
 . $DOTPATH/etc/lib/standard.sh
 
 # Ask for the administrator password upfront
-sudo -v
+##sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until this script has finished
 #while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-while true
-do
-    sudo -n true
-    sleep 60;
-    kill -0 "$$" || exit
-done 2>/dev/null &
+##while true
+##do
+##    sudo -n true
+##    sleep 60;
+##    kill -0 "$$" || exit
+##done 2>/dev/null &
 
 # main
 #cd $(dirname $0)
 
-for i in $DOTPATH/etc/init/*[^init].sh
+for i in $DOTPATH/etc/init/*.sh
 do
+    [[ i == $DOTPATH/etc/init/init.sh ]] && continue 
     bash $i
 done || true
 
