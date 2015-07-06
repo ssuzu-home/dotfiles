@@ -2335,6 +2335,7 @@ set wrap
 
 "set helpheight=999
 set mousehide
+set mouse=
 set virtualedit=block
 set virtualedit& virtualedit+=block
 
