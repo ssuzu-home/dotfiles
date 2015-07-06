@@ -2150,11 +2150,11 @@ augroup multi-window-toggle-cursor "{{{2
   autocmd WinLeave * setlocal nocursorline nocursorcolumn
 augroup END 
 
-augroup cursor-highlight-emphasis "{{{2
-  autocmd!
-  autocmd CursorMoved,CursorMovedI,WinLeave * hi! link CursorLine CursorLine | hi! link CursorColumn CursorColumn
-  autocmd CursorHold,CursorHoldI            * hi! link CursorLine Visual     | hi! link CursorColumn Visual
-augroup END
+"augroup cursor-highlight-emphasis "{{{2
+"  autocmd!
+"  autocmd CursorMoved,CursorMovedI,WinLeave * hi! link CursorLine CursorLine | hi! link CursorColumn CursorColumn
+"  autocmd CursorHold,CursorHoldI            * hi! link CursorLine Visual     | hi! link CursorColumn Visual
+"augroup END
 
 " GUI IME Cursor colors {{{2
 if has('multi_byte_ime') || has('xim')
