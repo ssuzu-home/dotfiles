@@ -26,9 +26,8 @@ fi
 # main
 #cd $(dirname $0)
 
-for i in $DOTPATH/etc/init/*.sh
+for i in $DOTPATH/etc/init/!(init).sh
 do
-    [[ $i == $DOTPATH/etc/init/init.sh ]] && continue 
     bash $i
 done || true
 
