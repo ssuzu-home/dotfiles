@@ -28,7 +28,7 @@ fi
 
 for i in $DOTPATH/etc/init/*.sh
 do
-    [[ i == $DOTPATH/etc/init/init.sh ]] && continue 
+    [[ $i == $DOTPATH/etc/init/init.sh ]] && continue 
     bash $i
 done || true
 
