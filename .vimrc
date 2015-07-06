@@ -1366,24 +1366,6 @@ endfunction
 " of the other sections will be described.
 "==============================================================================
 
-" Display B4B4R07 logo start-up. {{{2
-if !s:has_plugin('neobundle.vim')
-  command! B4B4R07 call s:b4b4r07()
-  augroup vimrc-without-plugin
-    autocmd!
-    autocmd VimEnter * if !argc() | call s:b4b4r07() | endif
-  augroup END
-  "autocmd VimEnter * nested if @% == '' && s:GetBufByte() == 0 | edit $MYVIMRC | endif
-  "function! s:GetBufByte()
-  "    let byte = line2byte(line('$') + 1)
-  "    if byte == -1
-  "        return 0
-  "    else
-  "        return byte - 1
-  "    endif
-  "endfunction
-endif
-
 " Builtin MRU {{{2
 if !s:has_plugin('mru.vim')
   " MRU configuration variables {{{3
@@ -3357,8 +3339,8 @@ if s:has_plugin('yankround.vim') "{{{2
 endif
 
 if s:has_plugin('gist-vim') "{{{2
-  let g:github_user = 'b4b4r07'
-  let g:github_token = '0417d1aeeb1016c444c5'
+  let g:github_user = 'user'
+  let g:github_token = 'token'
   let g:gist_curl_options = "-k"
   let g:gist_detect_filetype = 1
 endif
