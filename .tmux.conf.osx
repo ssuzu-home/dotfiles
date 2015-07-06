@@ -335,4 +335,7 @@ bind-key -t vi-copy V select-line
 #bind-key C-g choose-window
 #bind-key s command-prompt "select-window -t %%"
 
+set-window-option -g mode-mouse on
+set -g terminal-overrides 'xterm*:smcup@:rmcup@'
+
 # vim:fdm=marker expandtab fdc=3 ft=conf ts=2 sw=2 sts=2:
