@@ -237,25 +237,6 @@ dotfiles_install() {
 ### Main
 ###
 main() {
-cat <<-'EOT'
-
-    | |     | |  / _(_) |           
-  __| | ___ | |_| |_ _| | ___  ___  
- / _` |/ _ \| __|  _| | |/ _ \/ __| 
-| (_| | (_) | |_| | | | |  __/\__ \ 
- \__,_|\___/ \__|_| |_|_|\___||___/ 
-
-*** WHAT'S INSIDE? ***
-  1. Download https://github.com/ssuzu-home/dotfiles.git
-  2. Symlinking dot files to your home directory
-  3. Execute all sh files within 'etc/init/` (optional)
-
-See the README for documentation.
-https://github.com/ssuzu-home/dotfiles
-
-Copyright (c) 2014 "BABAROT" aka @b4b4r07
-Licensed under the MIT license.
-EOT
 
     e_newline
     dotfiles_install "$@"

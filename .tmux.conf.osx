@@ -41,3 +41,12 @@ set-option -g display-panes-colour colour166 #orange
 set-window-option -g clock-mode-colour colour64 #green
 
 # vim:fdm=marker expandtab fdc=3 ft=conf ts=2 sw=2 sts=2:
+
+## reattach-to-user-namespace {{{1
+# Make pbcopy/pbpaste and Vim's * register work.
+set-option -g default-command "reattach-to-user-namespace -l $SHELL"
+
+bind-key -t vi-copy v begin-selection
+bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+unbind-key -t vi-copy Enter
+bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
