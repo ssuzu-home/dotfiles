@@ -6,4 +6,5 @@ set -eu
 . $DOTPATH/etc/lib/vital.sh
 . $DOTPATH/etc/lib/standard.sh
 
+cd ~/.dotfiles
 git remote set-url origin git@ssh.github.com:ssuzu-home/dotfiles.git
