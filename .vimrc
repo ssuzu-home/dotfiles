@@ -3749,63 +3749,39 @@ set fileformats=unix,dos,mac
 "au BufWritePre *.go Fmt
 "au BufNewFile,BufRead *.go set sw=4 noexpandtab ts=4 completeopt=menu,preview
 "au FileType go compiler go
-""}}}
 
-" Test: {{{1
+"" for ssuzu {{{2
+if &term =~ "xterm"
+  let &t_ti .= "\e[?2004h"
+  let &t_te .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
 
-let s:vimp = {
-      \ "list": [
-      \   "ctrlp.vim",
-      \   "vim-surround",
-      \ ],
-      \ "dir":  ".vimp",
-      \ "file": "Vimpfile",
-      \}
+  function XTermPasteBegin(ret)
+    set paste
+    return a:ret
+  endfunction
 
-function! s:vimp.parse()
-  let list = []
+  noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+  cnoremap <special> <Esc>[200~ <nop>
+  cnoremap <special> <Esc>[201~ <nop>
+endif
 
-  for dep in readfile(self.file)
-    if isdirectory(dep)
-      let res = fnamemodify(dep, ":p")
-      call add(list, res)
-    else
-      let res = finddir(fnamemodify(dep, ":t"), expand("$HOME/.vim/bundle"))
-      if !empty(res)
-        call add(list, res)
-      endif
-    endif
-  endfor
+" IME ON/OFF
+let &t_SI .= "\e[<r"
+let &t_EI .= "\e[<s\e[<0t"
+let &t_te .= "\e[<0t\e[<s"
 
-  return list
-endfunction
+set timeoutlen=100
 
-function! s:vimp.symbolic()
-  if !isdirectory(self.dir)
-    call s:mkdir(self.dir)
-  endif
+let &t_SI .= "\e[?7727h"
+let &t_EI .= "\e[?7727l"
+inoremap <special> <Esc>O[ <Esc>
 
-  for link in s:vimp.parse()
-    call system(printf("ln -snf %s %s", link, self.dir))
-  endfor
-endfunction
-
-function! s:vimp.gen()
-  call writefile(self.list, self.file)
-endfunction
-
-function! s:vimp.vimp()
-  if !filereadable(self.file)
-    call s:vimp.gen()
-  endif
-  call s:vimp.symbolic()
-  echo readfile(self.file)
-endfunction
-
-command! Vimp call s:vimp.vimp()
 
 " __END__ {{{1
 " Must be written at the last.  see :help 'secure'.
 set secure
 
 " vim:fdm=marker expandtab fdc=3 ft=vim ts=2 sw=2 sts=2:
+
