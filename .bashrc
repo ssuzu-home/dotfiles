@@ -811,6 +811,10 @@ bind -x '"\C-r": _replace_by_history'
 bind    '"\C-xr": reverse-search-history'
 bind -x '"\C-r": peco-select-history'
 
+#stty erase '^h'
+tty -s && stty erase '^?'
+tty -s && stty stop undef
+
 tmux_automatically_attach
 
 # vim:fdm=marker fdc=3 ft=sh ts=2 sw=2 sts=2:
