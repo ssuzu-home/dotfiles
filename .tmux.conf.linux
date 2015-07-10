@@ -1,4 +1,4 @@
-## Colorscheme: Solarized light{{{2
+## Colorscheme: Solarized light{{{1
 
 # default statusbar colors
 set-option -g status-bg white #base2

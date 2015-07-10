@@ -2709,10 +2709,10 @@ nnoremap sl <C-w>l
 nnoremap sh <C-w>h
 
 " tabpages
-"nnoremap <silent> <C-l> :<C-u>silent! tabnext<CR>
-"nnoremap <silent> <C-h> :<C-u>silent! tabprev<CR>
-nnoremap <silent> <C-l> :<C-u>call <SID>win_tab_switcher('l')<CR>
-nnoremap <silent> <C-h> :<C-u>call <SID>win_tab_switcher('h')<CR>
+nnoremap <silent> <C-l> :<C-u>silent! tabnext<CR>
+nnoremap <silent> <C-h> :<C-u>silent! tabprev<CR>
+"nnoremap <silent> <C-l> :<C-u>call <SID>win_tab_switcher('l')<CR>
+"nnoremap <silent> <C-h> :<C-u>call <SID>win_tab_switcher('h')<CR>
 nnoremap t <Nop>
 nnoremap <silent> [Space]t :<C-u>tabclose<CR>:<C-u>tabnew<CR>
 nnoremap <silent> tt :<C-u>tabnew<CR>

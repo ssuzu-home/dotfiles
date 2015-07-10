@@ -331,7 +331,7 @@ function _exit()
 # Function to run upon exit of shell.
 {
 	end_history
-  echo -e  "${BRed}Hasta la vista, baby!"
+  echo -e  "${BRed}Bye!"
   echo -en "\033[m"
 }
 trap _exit EXIT
