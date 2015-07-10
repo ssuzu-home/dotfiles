@@ -3772,7 +3772,7 @@ let &t_SI .= "\e[<r"
 let &t_EI .= "\e[<s\e[<0t"
 let &t_te .= "\e[<0t\e[<s"
 
-set timeoutlen=100
+set ttimeoutlen=100
 
 let &t_SI .= "\e[?7727h"
 let &t_EI .= "\e[?7727l"
