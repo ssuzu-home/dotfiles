@@ -169,7 +169,7 @@ dotfiles_download() {
             curl -L "$tarball"
         elif has "wget"; then
             wget -O - "$tarball"
-        fi | tar xv -
+        fi | tar zxv -
         mv -f dotfiles-master "$DOTFILES"
 
     else
