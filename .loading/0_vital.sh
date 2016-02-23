@@ -1,1 +1,1 @@
-../etc/lib/vital.sh
+. ~/.dotfiles/etc/lib/vital.sh

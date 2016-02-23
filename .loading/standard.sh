@@ -1,1 +1,1 @@
-../etc/lib/standard.sh
+. ~/.dotfiles/etc/lib/standard.sh
