@@ -1,3 +1,7 @@
 [user]
     name = ssuzu
     email = ssuzu@se-1.net
+[url "git@github.com:"]
+  pushInsteadOf = git://github.com/
+  pushInsteadOf = https://github.com/
+
