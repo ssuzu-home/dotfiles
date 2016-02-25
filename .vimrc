@@ -121,17 +121,18 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
 
   " Taking care of NeoBundle by itself
   NeoBundleFetch 'Shougo/neobundle.vim'
+  NeoBundle 'sudo.vim'
 
   " NeoBundle List
   "NeoBundle 'altercation/vim-colors-solarized'
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'Shougo/vimproc', {
-        \ 'build': {
-        \     'windows': 'make -f make_mingw32.mak',
-        \     'cygwin': 'make -f make_cygwin.mak',
-        \     'mac': 'make -f make_mac.mak',
-        \     'unix': 'make -f make_unix.mak',
-        \ }}
+"  NeoBundle 'Shougo/unite.vim'
+"  NeoBundle 'Shougo/vimproc', {
+"        \ 'build': {
+"        \     'windows': 'make -f make_mingw32.mak',
+"        \     'cygwin': 'make -f make_cygwin.mak',
+"        \     'mac': 'make -f make_mac.mak',
+"        \     'unix': 'make -f make_unix.mak',
+"        \ }}
 "  NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
 "  NeoBundleLazy 'Shougo/unite-outline', {
 "        \ 'depends' : 'Shougo/unite.vim',
@@ -346,13 +347,13 @@ if stridx(&runtimepath, $NEOBUNDLEPATH) != -1
 "  NeoBundle 'w0ng/vim-hybrid', { "base" : $HOME."/.vim/colors" }
 
   " Disable plugins
-  if !has('gui_running')
-    NeoBundleDisable lightline.vim
-  endif
-  NeoBundleDisable skk.vim
-  NeoBundleDisable eskk.vim
-  "NeoBundleDisable mru.vim
-  "NeoBundleDisable vim-buftabs
+""  if !has('gui_running')
+""    NeoBundleDisable lightline.vim
+""  endif
+""  NeoBundleDisable skk.vim
+""  NeoBundleDisable eskk.vim
+""  "NeoBundleDisable mru.vim
+""  "NeoBundleDisable vim-buftabs
 
   " Manually manage rtp
   "NeoBundle 'vim-mru', {'type' : 'nosync', 'base' : '~/.vim/manual'}
