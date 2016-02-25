@@ -1,4 +1,4 @@
-DOTFILES_EXCLUDES := .DS_Store .git .tmux.conf.osx .tmux.conf.linux
+DOTFILES_EXCLUDES := .DS_Store .git .tmux.conf.osx .tmux.conf.linux .ssh
 DOTFILES_TARGET   := $(wildcard .??*) bin
 DOTFILES_FILES    := $(filter-out $(DOTFILES_EXCLUDES), $(DOTFILES_TARGET))
 
