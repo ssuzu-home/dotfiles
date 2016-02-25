@@ -26,9 +26,11 @@ fi
 # main
 #cd $(dirname $0)
 
-for i in $DOTPATH/etc/init/!(init).sh
+for i in $DOTPATH/etc/init/*.sh
 do
-    bash $i
+    if [ "${i##*/}" != "init.sh" ]; then
+        bash $i
+    fi
 done || true
 
 echo $(e_success "$0: Finish!!")
